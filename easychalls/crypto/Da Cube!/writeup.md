@@ -15,5 +15,3 @@ From here we just match up the pieces on the scrambled cube with the pieces on t
 ![alt text](image-3.png)
 
 The descrambled text reveals "flag{iwannagobacktotheblueroom}"
-
-![alt text](DaCube!.mp4)
