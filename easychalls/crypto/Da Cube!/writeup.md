@@ -1,8 +1,7 @@
 This crypto challenge involved a picture of a solved rubik's cube layout. 
 ![alt text](https://github.com/wboulton/CTFWriteups/blob/main/easychalls/crypto/Da%20Cube!/image-1.png)
 Each square is assigned a letter, representing a scrambled flag. 
-The encryption algorithm was cearly going to be some scramble such that the letters arranged to make a coherent flag. The challenge gave us a hint regaurding what this scramble was, 
-it told us that the picture came from communication between "deephax and mirveal". When we look into the GhostTown website and search for deephax, one of the threads included is 
+The encryption algorithm was cearly going to be some scramble such that the letters arranged to make a coherent flag. The challenge description mentioned that the picture came from communication between "deephax and mirveal". When we look into the GhostTown website and search for deephax, one of the threads included is 
 "AI Assistants: Game-Changer or Overhyped?". In this thread there is a message from Iamia415 that reveals the necessary rubik's cube scramble: 
 ![alt text](image.png)
 
