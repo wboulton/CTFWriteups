@@ -1,4 +1,4 @@
-This crypto challenge involved a picture of a solved rubik's cube layout. 
+This crypto challenge from DeadFace CTF 2024 involved a picture of a solved rubik's cube layout. 
 ![alt text](https://github.com/wboulton/CTFWriteups/blob/main/easychalls/crypto/Da%20Cube!/image-1.png)
 Each square is assigned a letter, representing a scrambled flag. 
 The encryption algorithm was cearly going to be some scramble such that the letters arranged to make a coherent flag. The challenge description mentioned that the picture came from communication between "deephax and mirveal". When we look into the GhostTown website and search for deephax, one of the threads included is 
