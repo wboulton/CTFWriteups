@@ -1,5 +1,5 @@
 # CTFWriteups
 Writeups for interesting CTF challenges I solved
 
-Easy Challs:
+Easy Challenges:
 - Crypto/Da Cube!
