@@ -1,5 +1,8 @@
 # CTFWriteups
 Writeups for interesting CTF challenges I solved
 
-Easy Challenges:
-- Crypto/Da Cube!
+Crypto:
+ - Da Cube! (deadface 2024)
+
+pwn:
+ - calling_convention (Bearcat World Tour 2025)
