@@ -1,4 +1,4 @@
-I competed in UMDCTF for the first time this year. Besides the interesting (and fun) theming, this was a great ctf with a lot of interesting challenges. Here, I am going to write up one particularly interesting challenge _cmsc351_, which let me get some practice with my new binary ninja license.
+I competed in UMDCTF for the first time this year. Besides the interesting (and fun) theming, this was a great ctf with a lot of interesting challenges. Here, I am going to write up one particularly interesting challenge _cmsc351_, which let me get some practice with my new [binary ninja](https://binary.ninja/) license.
 
 # cmsc351
 ![alt text](images/cmsc351.jpg)
