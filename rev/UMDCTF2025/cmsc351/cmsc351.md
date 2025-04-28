@@ -134,7 +134,7 @@ void checkStrings(const char *expectedResult) {
 There are multiple valid solutions, but the first one my script finds is "ttsstsssstssstttsssssssss", and we retrieve the flag: 
 UMDCTF{C4ll_Gr4ph5_ar3_st1ll_gr4ph5}.
 
-This brute actually took significantly less time than I was expecting, taking only a little over a minute to find a solution.
+This brute actually took significantly less time than I was expecting, taking only a little over two minutes to find a solution.
 
 ## rev
 The flag suggests that they wanted me to use the call graph, so I came back to this challenge the Monday after UMDCTF was over to try solving it this way. 
