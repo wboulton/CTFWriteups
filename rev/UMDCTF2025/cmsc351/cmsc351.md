@@ -9,7 +9,7 @@ ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, int
 ```
 and running it provides no output. 
 
-Imediately, I open the challenge in binary ninja and look for the main function:
+Immediately, I open the challenge in binary ninja and look for the main function:
 ```c
 fgets(&buf, 25, stdin);
 int32_t result;
