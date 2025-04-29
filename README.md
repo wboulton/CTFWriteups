@@ -6,3 +6,6 @@ Crypto:
 
 pwn:
  - calling_convention (Bearcat World Tour 2025)
+
+rev:
+ - cmsc351 (UMDCTF 2025)
