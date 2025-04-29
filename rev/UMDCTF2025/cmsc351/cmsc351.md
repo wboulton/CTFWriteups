@@ -37,7 +37,7 @@ else
     }
 }
 ```
-we see that this binary takes a 25 character input, runs some check _sub4079f0_ and prints the flag if the check returns any non-zero value.
+we see that this binary takes a 25 character input, runs some check ```sub_4079f0``` and prints the flag if the check returns any non-zero value.
 
 Now I can see that the binary is waiting for some input before printing out success or failure, so interacting with the binary looks like this:
 ```bash
@@ -45,23 +45,25 @@ $ ./cmsc351
 aaaaaaaaaaaaaaaaaaaaaaaaa
 sorry, looks like you shouldn't have fallen asleep in lecture.
 ```
-Ok, so the challenge is in the checker function _sub4079f0_, taking a look in this function we see the following: 
+Ok, so the challenge is in the checker function ```sub_4079f0```, taking a look in this function we see the following: 
 ```c
-char rax_5 = *(uint8_t*)arg3;
+int64_t sub_4079f0(int64_t arg1, int32_t arg2, char *input_string) {
+    char rax_5 = *(uint8_t*)input_string;
 
-if (rax_5 == 's') //binja display output switched to char
-    /* tailcall */
-    return sub_4079b0((uint64_t)(arg2 - 3), 
-        arg2 - 6, &arg3[1]);
+    if (rax_5 == 's') //binja display output switched to char
+        /* tailcall */
+        return sub_4079b0((uint64_t)(arg2 - 3), 
+            arg2 - 6, &input_string[1]);
 
-if (rax_5 == 't') //display switched to char
-    /* tailcall */
-    return sub_4052b0((uint64_t)(arg2 - 2), 
-        arg2 - 4, &arg3[1]);
+    if (rax_5 == 't') //display switched to char
+        /* tailcall */
+        return sub_4052b0((uint64_t)(arg2 - 2), 
+            arg2 - 4, &input_string[1]);
 
-return 0;
+    return 0;
+}
 ```
-It looks like this function checks if the first character of our input is an 's' or 't'. Depending on which letter we give in our input it will choose one of two paths to continue checking our input. If our input is anything other than an 's' or 't' then it immediately returns 0. Similarly, both functions _sub4079b0_ and _sub4052b0_ have the same structure, checking for 's' or 't' then moving on to the next byte of our input. This function is then repeated continuously for repeated function calls.
+It looks like this function checks if the first character of our input is an 's' or 't'. Depending on which letter we give in our input it will choose one of two paths to continue checking our input. If our input is anything other than an 's' or 't' then it immediately returns 0. Similarly, both functions ```sub_4079b0``` and ```sub_4052b0``` have the same structure, checking for 's' or 't', choosing a path, then moving on to the next byte of our input. This structure is then repeated for each subsequent function call.
 
 My first thought is to just follow the 's' path 25 calls through and see what it returns (presumably 0). However, you never reach 25 function calls as there is an infinite loop of function calls. This will eventually return 0 as the flag will be checked until reaching a null byte which will return 0. 
 
@@ -72,7 +74,7 @@ Now there are two ways to solve this challenge.
 2. **rev**:  
     I try to find a function that returns a number other than 0 and look at the function call graph in binja.
 
-I chose to brute force during the ctf, but I came back to this challenge after the ctf was over to try the more manual approach.
+I chose to brute force during the ctf, but I came back to this challenge after the ctf was over to try the more sophisticated approach.
 
 ## brute force
 First I wrote all of the possible input strings to a file using c:
@@ -139,62 +141,86 @@ This brute actually took significantly less time than I was expecting, taking on
 ## rev
 The flag suggests that they wanted me to use the call graph, so I came back to this challenge the Monday after UMDCTF was over to try solving it this way. 
 
-First I just went to the first function with the _sub_ prefix in binary ninja and conviently this function returns non-zero values. 
+The idea is that if I can find the function that returns non-zero values, I can then use some graph search algorithm (DFS or BFS) to find a call chain that will result in a correct solution.
+
+To start, I just went to the first function with the _sub_ prefix in binary ninja and conviently this function returns non-zero values. 
 ```c
 int64_t result;
 result = arg1 + arg2 <= 0;
 return result;
 ```
-When I look at the cross references in binja, however, I do not see any calls for this function so I needed to look for another function. Based on this function, I think it may be a safe guess that whichever funciton we are looking for includes "return result" so using the search function in binja with type Text (Pseudo C) I searched for all functions with the text "return result". This search returned two other functions: _sub40cfb0_ and _sub40e5a0_.
+When I look at the cross references in binja, however, I do not see any calls for this function so I needed to look for another function. Based on this function, I think it may be a safe guess that whichever funciton we are looking for includes "return result" so using the search function in binja with type 'Text (Pseudo C)' I searched for all functions with the text "return result". This search returned two other functions: ```sub_40cfb0``` and ```sub_40e5a0```.
 
 The first function:
 ```c
-char rax_6 = *(uint8_t*)arg3;
+int64_t sub_4079f0(int64_t arg1, int32_t arg2, char *input_string) {
+    char rax_6 = *(uint8_t*)input_string;
 
-if (rax_6 == 0x73)
-    /* tailcall */
-    return sub_40bec0((uint64_t)(arg2 - 2), arg2 - 6, &arg3[1]);
+    if (rax_6 == 0x73)
+        /* tailcall */
+        return sub_40bec0((uint64_t)(arg2 - 2), arg2 - 6, &input_string[1]);
 
-if (rax_6 != 0x74)
-    return 0;
+    if (rax_6 != 0x74)
+        return 0;
 
-char rcx = arg3[1];
+    char rcx = input_string[1];
 
-if (rcx == 0x73)
-    /* tailcall */
-    return sub_407e40((uint64_t)(arg2 - 0xf), arg2 - 0x1e, 
-        &arg3[2]);
+    if (rcx == 0x73)
+        /* tailcall */
+        return sub_407e40((uint64_t)(arg2 - 0xf), arg2 - 0x1e, 
+            &input_string[2]);
 
-if (rcx != 0x74)
-    return 0;
+    if (rcx != 0x74)
+        return 0;
 
-int32_t result;
-result = arg2 * 2 - 0x37 <= 0;
-return result;
+    int32_t result;
+    result = arg2 * 2 - 0x37 <= 0;
+    return result;
+}
 ```
 checks two characters, and if both of them are 't' it will return 
 ```c
 arg2*2-0x37<=0
 ```
-Given each function call reduces the value of arg2, we are probably looking for the latest this function can be called. This means we can approach this like a DFS (depth first search) on the call graph, looking at the greatest depth that this function can be called at.
+Looking back at these function calls:
+```c
+int64_t sub_4079f0(int64_t arg1, int32_t arg2, char *input_string) {
+    char rax_5 = *(uint8_t*)input_string;
 
-Given this fuction, we know that the last two characters of our input will be 'tt' so I will start building the input backwards from here
+    if (rax_5 == 's') //binja display output switched to char
+        /* tailcall */
+        return sub_4079b0((uint64_t)(arg2 - 3), 
+            arg2 - 6, &input_string[1]);
+
+    if (rax_5 == 't') //display switched to char
+        /* tailcall */
+        return sub_4052b0((uint64_t)(arg2 - 2), 
+            arg2 - 4, &input_string[1]);
+
+    return 0;
+}
+```
+I can see that arg2 is some integer that gets passed through each call layer, reduced by some hard-coded value each time, and it is hard-coded in the first function call in ```main``` as ```0xc7```
+
+Given each function call reduces the value of arg2, we are probably looking for the latest this function can be called. This means we can approach this like a DFS (depth first search) on the function call graph, looking for the greatest depth (from ```main```) that this function can be called.
+
+Given this function, we know that the last two characters of our input will be 'tt' so I will start building the input backwards from here
 ```bash
 tt
 ```
 Then I will just continue to follow the call graph manually by checking the cross references in binja. 
 
-_sub40cfb0_ is only called in _sub407dc0_ with character t.
+```sub_40cfb0``` is only called in ```sub_407dc0``` with character t.
 ```bash
 ttt
 ```
-_sub407dc0_ is only called in _sub407e00_ with character s
+```sub_407dc0``` is only called in ```sub_407e00``` with character s
 ```bash
 ttts
 ```
-_sub407e00_ is called multiple times, so now we will want to start an actual DFS as to not do this all manually. 
+```sub_407e00``` is called multiple times, so now we will want to start an actual DFS as to not do this all manually. 
 
-Luckily, this is pretty easy in the binary ninja python terminal (am I glazing binja too much?):
+Luckily, this is pretty easy in the binary ninja python terminal (am I glazing binja too much?). I can build a call graph by extracting all of the calls and tail calls in each function using the following python script:
 ```python
 from binaryninja import *
 call_graph = {}
@@ -212,7 +238,7 @@ for func in bv.functions:
  						callees.append(called_func)
  	call_graph[func] = callees
 ```
-Now that I have a call_graph built, I can write the dfs:
+Now that I have a call_graph built, I can write a standard dfs:
 ```python
 def dfs(call_graph, start_func, target_func, path=None, visited=None):
     if path is None:
@@ -250,5 +276,6 @@ This does not produce the correct answer for some reason, so I decided to play w
 ```bash
 ttsstsssstsssttt
 ```
+On second thought, I probably could have included the change in arg2 as the weight of edges for the call graph to make a more sophisticated DFS, but this method managed to get a correct solution regardless.
 
 In the end, this solution is cool and makes good use of binary ninja, but it took me significantly longer than the brute-force solution, so I think I chose the right method during the ctf. 
