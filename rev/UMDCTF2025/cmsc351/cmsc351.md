@@ -65,7 +65,7 @@ int64_t sub_4079f0(int64_t arg1, int32_t arg2, char *input_string) {
 ```
 It looks like this function checks if the first character of our input is an 's' or 't'. Depending on which letter we give in our input it will choose one of two paths to continue checking our input. If our input is anything other than an 's' or 't' then it immediately returns 0. Similarly, both functions ```sub_4079b0``` and ```sub_4052b0``` have the same structure, checking for 's' or 't', choosing a path, then moving on to the next byte of our input. This structure is then repeated for each subsequent function call.
 
-My first thought is to just follow the 's' path 25 calls through and see what it returns (presumably 0). However, you never reach 25 function calls as there is an infinite loop of function calls. This will eventually return 0 as the flag will be checked until reaching a null byte which will return 0. 
+My first thought is to just follow the 's' path 25 calls through and see what it returns (presumably 0). However, you never reach 25 function calls as there is an infinite loop of function calls. This will eventually return 0 as the input will be checked until reaching a null byte which will return 0. 
 
 Now there are two ways to solve this challenge.
 1. **brute force**:  
