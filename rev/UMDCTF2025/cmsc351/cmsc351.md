@@ -72,7 +72,7 @@ Now there are two ways to solve this challenge.
     I can write a c script to guess all 2^25 strings of 's' and 't' until it finds one string that works. Doing this is probably not the fastest or best way to approach this problem, but it will let me move on to another challenge while my script does it's work.
 
 2. **rev**:  
-    I try to find a function that returns a number other than 0 and look at the function call graph in binja.
+    I try to find a function that returns a number other than 0 and extract the function call graph with binary ninja.
 
 I chose to brute force during the ctf, but I came back to this challenge after the ctf was over to try the more sophisticated approach.
 
